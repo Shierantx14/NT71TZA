@@ -1,12 +1,10 @@
 import { createStore } from 'vuex'
+import authentication from "@/store/modules/authentication";
+import player from "@/store/modules/player";
 
 export default createStore({
-  state: {
-  },
-  mutations: {
-  },
-  actions: {
-  },
   modules: {
+    authentication,
+    player
   }
 })
