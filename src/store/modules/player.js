@@ -6,7 +6,10 @@ export default {
         albumImage: "",
         artist: "",
         trackTitle: "",
+        shuffle: false,
+        repeat: 0, // 0 --> OFF (default), 1 --> repeat All, 2 --> repeat Once
         paused: true,
+        volume: 0.10
     },
     mutations: {
         SET_DEVICE_ID(state, data) {
@@ -23,10 +26,25 @@ export default {
         },
         ITS_PAUSE(state, data) {
             state.paused = data
+        },
+        SET_REPEAT_MODE(state, data) {
+            state.repeat = data
+        },
+        SET_SHUFFLE_MODE(state, data) {
+            state.shuffle = data
+        },
+        SET_VOLUME(state, data) {
+            state.volume = data
         }
     },
     actions: {
         initPlayer({state, commit, rootGetters}) {
+            /* Add spotify web Playback to html head */
+            const spotifyScript = document.createElement('script');
+            spotifyScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
+            document.head.appendChild(spotifyScript);
+
+            /* Initialize Spotify SDK */
             function spotifySDK() {
                 return new Promise(resolve => {
                     if (window.Spotify) {
@@ -50,6 +68,7 @@ export default {
                 const engine = new Player({
                     name: "NTX Spotify Player",
                     getOAuthToken: cb => { cb(rootGetters["authentication/returnAuthToken"]); },
+                    volume: state.volume
                 })
                 // Ready
                 engine.addListener('ready', ({ device_id }) => {
@@ -58,23 +77,25 @@ export default {
                 });
 
                 // Not Ready
-                engine.addListener('not_ready', ({ device_id }) => {
+                engine.addListener('not_ready', () => {
                     console.log('Device ID has gone offline', state.deviceID);
                 });
                 // Status
                 engine.addListener("player_state_changed", (states) => {
-                    if (state) {
+                    if (states) {
                         commit('SET_TRACK_TITLE', states.track_window.current_track.name);
                         commit('SET_ALBUM_IMAGE', states.track_window.current_track.album.images[2].url);
                         commit('SET_ARTIST', getArtist(states.track_window.current_track.artists))
                         commit('ITS_PAUSE', states.paused)
+                        commit('SET_REPEAT_MODE', states.repeat_mode)
+                        commit('SET_SHUFFLE_MODE', states.shuffle)
                     }
                 });
                 engine.connect()
             }
             startPlayer()
         },
-        async togglePlayback({state, commit, rootGetters}) {
+        async togglePlayback({state, rootGetters}) {
             switch (state.paused) {
                 case true:
                     await api.player.setPlay(state.deviceID, rootGetters['authentication/returnAuthToken']);
@@ -83,6 +104,39 @@ export default {
                     await api.player.setPause(state.deviceID, rootGetters['authentication/returnAuthToken']);
                     break;
             }
+        },
+        async nextTrack({state, rootGetters}) {
+            await api.player.nextTrack(state.deviceID, rootGetters['authentication/returnAuthToken']);
+        },
+        async previousTrack({state, rootGetters}) {
+            await api.player.previousTrack(state.deviceID, rootGetters['authentication/returnAuthToken']);
+        },
+        async toggleRepeat({state, rootGetters}) {
+            switch (state.repeat) {
+                case 0:
+                    await api.player.setRepeatMode(state.deviceID, rootGetters['authentication/returnAuthToken'], "context");
+                    break
+                case 1:
+                    await api.player.setRepeatMode(state.deviceID, rootGetters['authentication/returnAuthToken'], "track");
+                    break
+                case 2:
+                    await api.player.setRepeatMode(state.deviceID, rootGetters['authentication/returnAuthToken'], "off");
+                    break
+            }
+        },
+        async toggleShuffle({state, rootGetters}) {
+            switch (state.shuffle) {
+                case true:
+                    await api.player.setShuffle(state.deviceID, rootGetters['authentication/returnAuthToken'], false);
+                    break
+                case false:
+                    await api.player.setShuffle(state.deviceID, rootGetters['authentication/returnAuthToken'], true);
+                    break
+            }
+        },
+        async setPlayerVolume({state,commit,rootGetters}, volume) {
+            commit('SET_VOLUME', volume);
+            await api.player.setVolume(state.deviceID, rootGetters['authentication/returnAuthToken'],(state.volume * 100).toFixed(0));
         }
     },
     getters: {
@@ -97,6 +151,15 @@ export default {
         },
         getPauseStatus(state) {
             return state.paused
+        },
+        getRepeatStatus(state) {
+            return state.repeat
+        },
+        getShuffleStatus(state) {
+            return state.shuffle
+        },
+        getVolume(state) {
+            return state.volume
         }
     }
 }

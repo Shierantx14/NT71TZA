@@ -5,13 +5,15 @@ export default {
     state: {
         authToken: "",
         refreshToken: "",
-        expires: 0
+        expires: 0,
+        isLogin: false
     },
     mutations: {
         saveLoginCredentials(state, data) {
             state.authToken = data.access_token
             state.refreshToken = data.refresh_token
             state.expires = data.expires_in
+            state.isLogin = true
         },
         updateAccessToken(state, data) {
             state.authToken = data.access_token
@@ -63,6 +65,9 @@ export default {
     getters: {
         returnAuthToken(state) {
             return state.authToken
+        },
+        itsLogin(state) {
+            return state.isLogin
         }
     }
 }
