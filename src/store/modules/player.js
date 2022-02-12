@@ -5,8 +5,11 @@ export default {
         deviceID: "",
         albumImage: "",
         artist: "",
+        progressInterval: null,
         trackTitle: "",
         shuffle: false,
+        trackDuration: 0,
+        trackRemaining: 0,
         repeat: 0, // 0 --> OFF (default), 1 --> repeat All, 2 --> repeat Once
         paused: true,
         volume: 0.10
@@ -35,15 +38,24 @@ export default {
         },
         SET_VOLUME(state, data) {
             state.volume = data
+        },
+        SET_TRACK_DURATION(state, data) {
+          state.trackDuration = data
+        },
+        SET_TRACK_REMAINING(state, data) {
+            state.trackRemaining = data
         }
     },
     actions: {
-        initPlayer({state, commit, rootGetters}) {
-            /* Add spotify web Playback to html head */
-            const spotifyScript = document.createElement('script');
-            spotifyScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
-            document.head.appendChild(spotifyScript);
-
+        initPlayer({state, commit, dispatch, rootGetters}) {
+            /* (Dev Only) check if spotify script is already added to head */
+            if(!document.getElementById("spotifySDK")) {
+                /* Add spotify web Playback to html head */
+                const spotifyScript = document.createElement('script');
+                spotifyScript.setAttribute("src", "https://sdk.scdn.co/spotify-player.js");
+                spotifyScript.setAttribute("id", "spotifySDK")
+                document.head.appendChild(spotifyScript);
+            }
             /* Initialize Spotify SDK */
             function spotifySDK() {
                 return new Promise(resolve => {
@@ -89,6 +101,8 @@ export default {
                         commit('ITS_PAUSE', states.paused)
                         commit('SET_REPEAT_MODE', states.repeat_mode)
                         commit('SET_SHUFFLE_MODE', states.shuffle)
+                        commit('SET_TRACK_DURATION', states.duration)
+                        commit('SET_TRACK_REMAINING', states.position)
                     }
                 });
                 engine.connect()
@@ -137,6 +151,17 @@ export default {
         async setPlayerVolume({state,commit,rootGetters}, volume) {
             commit('SET_VOLUME', volume);
             await api.player.setVolume(state.deviceID, rootGetters['authentication/returnAuthToken'],(state.volume * 100).toFixed(0));
+        },
+        updateTrackRemaining({state, commit}) {
+            if (!state.paused) {
+                state.progressInterval = setInterval(() => {
+                    if (state.trackRemaining < state.trackDuration) {
+                        commit('SET_TRACK_REMAINING', state.trackRemaining + 1000)
+                    }
+                }, 1000)
+            } else {
+                clearInterval(state.progressInterval);
+            }
         }
     },
     getters: {
@@ -160,6 +185,12 @@ export default {
         },
         getVolume(state) {
             return state.volume
+        },
+        getTrackLength(state) {
+            return state.trackDuration
+        },
+        getTrackRemaining(state) {
+          return state.trackRemaining
         }
     }
 }
