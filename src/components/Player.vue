@@ -88,9 +88,6 @@ export default {
       this.$refs.volume.addEventListener(type, () => {
         this.changeVolume(this.$refs.volume.value)
       });
-      setInterval(() => {
-        this.progress += 1
-      }, 1000)
     });
   },
   computed: {
