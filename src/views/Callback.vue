@@ -18,6 +18,8 @@ export default {
             break
         }
       });
+    } else {
+      this.$router.push({path:"/login"});
     }
     if(this.$route.query.error) {
       return this.$router.push({path:"/login"})

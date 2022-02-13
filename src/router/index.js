@@ -22,6 +22,12 @@ const routes = [
     name: 'Callback',
     component: () => import(/* webpackChunkName: "callback" */ '@/views/Callback'),
     meta: {needLogin: false}
+  },
+  {
+    path: '/account',
+    name: 'Account',
+    component: () => import(/* webpackChunkName: "useraccount" */ '@/views/Accounts'),
+    meta: {needLogin: true}
   }
 ]
 
@@ -30,7 +36,7 @@ const router = createRouter({
   routes
 })
 /* Guardian */
-router.beforeEach((to, from) => {
+router.beforeResolve((to) => {
   /* Check if the route need the user to authenticated before the user can go to that route
   * if authenticated than let it pass otherwise redirect to login route */
   if (to.meta.needLogin && !store.getters['authentication/itsLogin']) {

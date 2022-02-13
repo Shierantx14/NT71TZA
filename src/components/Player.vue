@@ -1,11 +1,12 @@
 <template>
   <!-- Player Controller -->
-  <div class="d-flex vw-100 bg-dark justify-content-between fixed-bottom p-3 shadow-sm">
+  <div class="d-flex bg-dark justify-content-between fixed-bottom p-2 shadow-sm">
+    <!-- Track Information -->
     <div class="d-flex w-50 gap-1">
       <!-- Album Cover -->
       <img :src="albumImage" class="rounded album-cover mt-auto mb-auto" alt="album cover">
       <!-- Track Info -->
-      <div class="d-grid w-100 ms-1 mb-0 track-info p-2">
+      <div class="d-grid h-100 w-100 ms-1 mb-0 track-info p-2">
         <!-- Title -->
         <p class="track-info-text mb-0 fw-bold text-break">{{ trackTitle }}</p>
         <!-- Artist -->
@@ -60,7 +61,7 @@
       </div>
     </div>
     <!-- Extra Control -->
-    <div class="d-flex g-5 w-50 justify-content-end">
+    <div class="d-flex g-5 w-50 me-3 justify-content-end">
       <div class="d-flex mt-auto mb-auto justify-content-end align-items-center">
         <button class="control-button me-1"><i class="text-white fs-6 fa-solid fa-volume-high"></i></button>
         <!-- Volume Slider -->
