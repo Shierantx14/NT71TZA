@@ -35,22 +35,8 @@
       <div class="d-flex flex-wrap justify-content-center gap-3 p-3 flex-row">
         <!-- Track Box -->
         <div v-for="tracks in tracksList" class="d-flex justify-content-between track-box-dashboard rounded-2 shadow-sm">
-          <div class="d-flex justify-content-start">
-            <div class="d-flex p-2">
-              <img :src="tracks.image" class="rounded track-cover-dashboard" alt="album cover">
-            </div>
-            <!-- Track Information -->
-            <div class="d-grid ms-1 track-info-dashboard">
-              <p class="mb-0 text-white fw-bold">{{ tracks.title }}</p>
-              <p class="mb-0 text-white-50 track-artist">{{ tracks.artists }}</p>
-            </div>
-          </div>
-          <!-- Play Button -->
-          <div class="d-flex justify-content-end">
-            <div class="d-flex p-2">
-              <button class="btn-play p-2"><i class="shadow-sm btn-play-logo fa-solid fa-circle-play"></i></button>
-            </div>
-          </div>
+          <!-- Track Box -->
+          <miniplayer :tracks="tracks"></miniplayer>
         </div>
       </div>
     </div>
@@ -58,12 +44,11 @@
 </template>
 
 <script>
+import miniplayer from "@/components/miniplayer";
 export default {
   name: "userPlaylist",
-  data() {
-    return {
-      loopTest: 6
-    }
+  components: {
+    miniplayer
   },
   created() {
     this.getTopData()
@@ -94,28 +79,8 @@ export default {
 .visit-artist-btn {
   background-color: #07bd10;
 }
-.track-artist {
-  line-height: 1rem;
-  font-size: 14px;
-}
-.track-info-dashboard {
-  grid-template-rows: 23px;
-  align-content: center;
-}
-.track-cover-dashboard {
-  width: 64px;
-  height: 64px;
-}
 .track-box-dashboard {
   background-color: #1e1e1e;
   width: 25%;
-}
-.btn-play {
-  background:none;
-  border: none;
-}
-.btn-play-logo {
-  color: #07bd10;
-  font-size: 34px;
 }
 </style>

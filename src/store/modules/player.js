@@ -3,6 +3,7 @@ export default {
     namespaced: true,
     state: {
         deviceID: "",
+        trackID: "",
         albumImage: "",
         artist: "",
         progressInterval: null,
@@ -12,7 +13,7 @@ export default {
         trackRemaining: 0,
         repeat: 0, // 0 --> OFF (default), 1 --> repeat All, 2 --> repeat Once
         paused: true,
-        volume: 0.10
+        volume: 0.50
     },
     mutations: {
         SET_DEVICE_ID(state, data) {
@@ -44,6 +45,9 @@ export default {
         },
         SET_TRACK_REMAINING(state, data) {
             state.trackRemaining = data
+        },
+        SET_TRACK_ID(state, data) {
+            state.trackID = data
         }
     },
     actions: {
@@ -103,6 +107,7 @@ export default {
                         commit('SET_SHUFFLE_MODE', states.shuffle)
                         commit('SET_TRACK_DURATION', states.duration)
                         commit('SET_TRACK_REMAINING', states.position)
+                        commit('SET_TRACK_ID', states.track_window.current_track.id)
                     }
                 });
                 engine.connect()
@@ -191,6 +196,9 @@ export default {
         },
         getTrackRemaining(state) {
           return state.trackRemaining
+        },
+        getTrackId(state) {
+            return state.trackID
         }
     }
 }
