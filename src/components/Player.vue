@@ -126,11 +126,11 @@ export default {
       return this.$store.getters['player/getVolume']
     },
     trackDuration() {
-      this.trackLength = (this.$store.getters['player/getTrackLength'] / 1000).toFixed()
+      this.trackLength = this.$store.getters['player/getTrackLength'] ? (this.$store.getters['player/getTrackLength'] / 1000).toFixed() : 100
       return this.$store.getters['player/getTrackLength'] ? this.converter(this.$store.getters['player/getTrackLength']) : "00:00"
     },
     trackRemaining() {
-      this.trackRemain = (this.$store.getters['player/getTrackRemaining'] / 1000).toFixed()
+      this.trackRemain = this.$store.getters['player/getTrackRemaining'] ? (this.$store.getters['player/getTrackRemaining'] / 1000).toFixed() : 0
       return this.$store.getters['player/getTrackRemaining'] ? this.converter(this.$store.getters['player/getTrackRemaining']) : "00:00"
     }
   },

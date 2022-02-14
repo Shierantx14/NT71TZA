@@ -23,7 +23,7 @@
           <router-link to="/account" class="d-flex text-decoration-none">
             <div class="d-flex w-100 bg-black box-account p-1">
               <img :src="profileImage" class="profile-img me-2" alt="profile">
-              <p class="text-account me-3 mb-auto mt-auto">{{ username }}</p>
+              <p class="text-account me-3 mb-auto fw-bold mt-auto">{{ username }}</p>
             </div>
           </router-link>
         </div>
