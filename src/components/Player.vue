@@ -6,11 +6,11 @@
       <!-- Album Cover -->
       <img :src="albumImage" class="rounded album-cover mt-auto mb-auto" alt="album cover">
       <!-- Track Info -->
-      <div class="d-grid h-100 w-100 ms-1 mb-0 track-info p-2">
+      <div class="d-grid h-100 ms-1 mb-auto mt-auto track-info p-2">
         <!-- Title -->
         <p class="track-info-text mb-0 fw-bold text-break">{{ trackTitle }}</p>
         <!-- Artist -->
-        <p class="track-info-text mb-0 fs-6 fw-light">{{ trackArtist }}</p>
+        <p class="track-info-text-artist text-white-50 mb-0 fw-light">{{ trackArtist }}</p>
       </div>
     </div>
     <!-- Player Control -->
@@ -170,7 +170,10 @@ export default {
 }
 </script>
 
-<style>
+<style scoped>
+.track-info-text-artist {
+  font-size: 1rem;
+}
 .album-cover {
   height: 65px;
   width: 65px;

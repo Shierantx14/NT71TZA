@@ -10,9 +10,11 @@ export default {
             }
         })
     },
-    setPlay(device_id, authToken) {
+    setPlay(device_id, authToken, tracks, album) {
         return base.put('/me/player/play', {
-            device_id
+            device_id,
+            uris: tracks,
+            context_uri: album
         }, {
             headers: {
                 Authorization: `Bearer ${authToken}`
@@ -70,6 +72,26 @@ export default {
             },
             params: {
                 volume_percent: volume
+            }
+        })
+    },
+    recentlyPlayed(authToken, limit) {
+        return base.get('/me/player/recently-played', {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            },
+            params: {
+                limit
+            }
+        })
+    },
+    transferPlayback(device_id, authToken) {
+        return base.put('/me/player', {
+            device_ids: [`${device_id}`],
+            play: true
+        }, {
+            headers: {
+                Authorization: `Bearer ${authToken}`
             }
         })
     }

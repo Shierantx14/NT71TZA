@@ -4,6 +4,7 @@ export default {
     state: {
         deviceID: "",
         trackID: "",
+        albumName: "",
         albumImage: "",
         artist: "",
         progressInterval: null,
@@ -48,6 +49,9 @@ export default {
         },
         SET_TRACK_ID(state, data) {
             state.trackID = data
+        },
+        SET_ALBUM_NAME(state, data) {
+            state.albumName = data
         }
     },
     actions: {
@@ -89,7 +93,7 @@ export default {
                 // Ready
                 engine.addListener('ready', ({ device_id }) => {
                     commit('SET_DEVICE_ID', device_id)
-                    console.log('Ready with Device ID', state.deviceID);
+                    api.player.transferPlayback(state.deviceID, rootGetters['authentication/returnAuthToken'])
                 });
 
                 // Not Ready
@@ -108,6 +112,7 @@ export default {
                         commit('SET_TRACK_DURATION', states.duration)
                         commit('SET_TRACK_REMAINING', states.position)
                         commit('SET_TRACK_ID', states.track_window.current_track.id)
+                        commit('SET_ALBUM_NAME', states.track_window.current_track.album.name)
                     }
                 });
                 engine.connect()
@@ -123,6 +128,12 @@ export default {
                     await api.player.setPause(state.deviceID, rootGetters['authentication/returnAuthToken']);
                     break;
             }
+        },
+        async playSelected({state,rootGetters}, track) {
+          await api.player.setPlay(state.deviceID, rootGetters['authentication/returnAuthToken'],[`${track}`], null)
+        },
+        async playAlbum({state,rootGetters}, album) {
+            await api.player.setPlay(state.deviceID, rootGetters['authentication/returnAuthToken'],null, album)
         },
         async nextTrack({state, rootGetters}) {
             await api.player.nextTrack(state.deviceID, rootGetters['authentication/returnAuthToken']);
@@ -199,6 +210,9 @@ export default {
         },
         getTrackId(state) {
             return state.trackID
+        },
+        getAlbumName(state) {
+            return state.albumName
         }
     }
 }

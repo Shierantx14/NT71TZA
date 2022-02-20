@@ -73,6 +73,7 @@ export default {
                             image: tracks.album.images[1].url,
                             title: tracks.name,
                             artists: getArtist(tracks.artists),
+                            uri: tracks.uri
                         })
                     })
                     commit('SAVE_TOP_TRACKS', listArray)
@@ -90,7 +91,7 @@ export default {
                 url: `${state.userUrl}`,
                 region: `${state.userRegion}`,
                 followers: `${state.userFollower}`,
-                userType: `${state.accountType}`
+                userType: `${state.accountType}`,
             }
         },
         getTopArtists(state) {
@@ -98,6 +99,9 @@ export default {
         },
         getTopTracks(state) {
             return state.topTracks
+        },
+        getRegion(state) {
+            return state.userRegion
         }
     }
 }
