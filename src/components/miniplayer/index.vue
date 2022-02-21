@@ -67,7 +67,7 @@ export default {
   border: none;
 }
 .btn-play-logo {
-  color: #07bd10;
+  color: #4f9a87;
   font-size: 34px;
 }
 </style>

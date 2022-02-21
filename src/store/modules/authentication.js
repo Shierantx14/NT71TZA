@@ -1,5 +1,5 @@
 import axios from "axios";
-import * as querystring from "querystring";
+import querystring from "query-string"
 export default {
     namespaced: true,
     state: {

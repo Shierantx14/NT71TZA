@@ -77,10 +77,10 @@ export default {
   border-radius: 50%
 }
 .visit-artist-btn {
-  background-color: #07bd10;
+  background-color: #4f9a87;
 }
 .track-box-dashboard {
-  background-color: #1e1e1e;
+  background-color: #0c1c19;
   width: 25%;
 }
 </style>

@@ -64,12 +64,12 @@ export default {
 }
 
 .btn-control-logo {
-  color: #07bd10;
+  color: #4f9a87;
   font-size: 34px;
 }
 
 .flex-container {
-  background-color: #1e1e1e;
+  background-color: #0c1c19;
   width: 25%;
   display: flex;
   justify-content: space-between;

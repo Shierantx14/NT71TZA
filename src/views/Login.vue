@@ -7,7 +7,7 @@
 </template>
 
 <script>
-import * as querystring from "querystring";
+import querystring from 'query-string'
 
 export default {
   name: "Login",

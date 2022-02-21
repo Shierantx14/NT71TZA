@@ -22,3 +22,7 @@ pnpm-debug.log*
 *.njsproj
 *.sln
 *.sw?
+# Backup Archive
+*.7z
+#Electron-builder output
+/dist_electron
